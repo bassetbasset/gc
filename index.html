@@ -324,13 +324,12 @@
 
 <script>
 const correctPassword = "basset";
-const oneHour = 60 * 60 * 1000;
 
 
 function checkPassword() {
   const userPassword = document.getElementById("password").value;
   if (userPassword === correctPassword) {
-    localStorage.setItem("lastLoginTime", Date.now());
+    localStorage.setItem("isAuthenticated", "true");
     setPageState("selectionContainer");
     goToPage("selectionContainer");
   } else {
@@ -399,11 +398,10 @@ function togglePdfList(id) {
 
 
 function restorePageState() {
-  const lastLoginTime = localStorage.getItem("lastLoginTime");
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
   const currentPage = localStorage.getItem("currentPage");
-  
 
-  if (lastLoginTime && Date.now() - lastLoginTime < oneHour) {
+  if (isAuthenticated === "true") {
     if (currentPage) {
       goToPage(currentPage);
     } else {
@@ -413,12 +411,12 @@ function restorePageState() {
     goToPage("loginContainer");
   }
 
-
   const openedPdfListId = localStorage.getItem("openedPdfList");
   if (openedPdfListId) {
     togglePdfList(openedPdfListId);
   }
 }
+
 
 
 document.getElementById("password").addEventListener("keydown", function (event) {
