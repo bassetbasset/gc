@@ -376,50 +376,47 @@ document.addEventListener('keydown', function(event) {
         (event.ctrlKey && event.key === 'U')) {
         event.preventDefault();
     }
-});
+});
+
+const correctPassword = "20242025";
 
 
-// Default correct password
-const defaultPassword = "20242025";
-
-// Check if password is already saved in the browser
-window.onload = function () {
-  const savedPassword = localStorage.getItem("password");
-
-  if (savedPassword === defaultPassword) {
-    // Show the main page if the saved password matches the default
-    document.getElementById("selection-container").style.display = "block";
-    document.getElementById("password-page").style.display = "none";
-  }
-};
-
-// Function to check the password
 function checkPassword() {
-  const inputPassword = document.getElementById("password-input").value;
-
-  if (inputPassword === defaultPassword) {
-    // Save the password in browser storage
-    localStorage.setItem("password", inputPassword);
-
-    // Redirect to main page
-    document.getElementById("selection-container").style.display = "block";
-    document.getElementById("password-page").style.display = "none";
+  const userPassword = document.getElementById("password").value;
+  if (userPassword === correctPassword) {
+    localStorage.setItem("isAuthenticated", "true");
+    setPageState("selectionContainer");
+    goToPage("selectionContainer");
   } else {
-    alert("Incorrect Password. Please try again.");
+    document.getElementById("errorMessage").style.display = "block";
   }
 }
 
-// Check if the password is tampered
-document.addEventListener("DOMContentLoaded", () => {
-  const savedPassword = localStorage.getItem("password");
 
-  if (savedPassword && savedPassword !== defaultPassword) {
-    // Redirect back to the password page if tampered
-    document.getElementById("selection-container").style.display = "none";
-    document.getElementById("password-page").style.display = "block";
-    alert("Password has been changed. Please re-enter the new password.");
-  }
-});
+function goToPage(pageId) {
+
+  const containers = document.querySelectorAll(".container > div");
+  containers.forEach((container) => {
+    container.style.display = "none";
+  });
+
+
+  document.getElementById(pageId).style.display = "block";
+
+
+  localStorage.setItem("currentPage", pageId);
+}
+
+
+function returnToSelection() {
+  setPageState("selectionContainer");
+  goToPage("selectionContainer");
+}
+
+
+function setPageState(pageId) {
+  localStorage.setItem("currentPage", pageId);
+}
 
 
 function togglePdfList(id) {
@@ -492,4 +489,4 @@ window.onload = restorePageState;
   
 
 </body>
-</html>
+</html>
