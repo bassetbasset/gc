@@ -379,27 +379,47 @@ document.addEventListener('keydown', function(event) {
 });
 
 
+// Default correct password
+const defaultPassword = "20242025";
+
+// Check if password is already saved in the browser
+window.onload = function () {
+  const savedPassword = localStorage.getItem("password");
+
+  if (savedPassword === defaultPassword) {
+    // Show the main page if the saved password matches the default
+    document.getElementById("main-page").style.display = "block";
+    document.getElementById("password-page").style.display = "none";
+  }
+};
+
+// Function to check the password
 function checkPassword() {
-    const password = document.getElementById('password').value;
-    const errorMessage = document.getElementById('errorMessage');
-    if (password === '202420257') {
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('selectionContainer').style.display = 'block';
-    } else {
-        errorMessage.style.display = 'block';
-    }
+  const inputPassword = document.getElementById("password-input").value;
+
+  if (inputPassword === defaultPassword) {
+    // Save the password in browser storage
+    localStorage.setItem("password", inputPassword);
+
+    // Redirect to main page
+    document.getElementById("main-page").style.display = "block";
+    document.getElementById("password-page").style.display = "none";
+  } else {
+    alert("Incorrect Password. Please try again.");
+  }
 }
 
-function goToPage(pageId) {
-    document.querySelectorAll('.content-container').forEach(el => el.style.display = 'none');
-    document.getElementById(pageId).style.display = 'block';
-    document.getElementById('selectionContainer').style.display = 'none';
-}
+// Check if the password is tampered
+document.addEventListener("DOMContentLoaded", () => {
+  const savedPassword = localStorage.getItem("password");
 
-function returnToSelection() {
-    document.getElementById('selectionContainer').style.display = 'block';
-    document.querySelectorAll('.content-container').forEach(el => el.style.display = 'none');
-}
+  if (savedPassword && savedPassword !== defaultPassword) {
+    // Redirect back to the password page if tampered
+    document.getElementById("main-page").style.display = "none";
+    document.getElementById("password-page").style.display = "block";
+    alert("Password has been changed. Please re-enter the new password.");
+  }
+});
 
 
 function togglePdfList(id) {
