@@ -376,15 +376,13 @@ document.addEventListener('keydown', function(event) {
         (event.ctrlKey && event.key === 'U')) {
         event.preventDefault();
     }
-});
-
-const correctPassword = "20242025";
+});
 
 
 function checkPassword() {
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('errorMessage');
-    if (password === '20242025') {
+    if (password === '202420257') {
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('selectionContainer').style.display = 'block';
     } else {
