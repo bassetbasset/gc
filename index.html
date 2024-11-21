@@ -363,9 +363,7 @@
 
 
 </div>
-
 <script>
-
 document.addEventListener('contextmenu', function(event) {
     event.preventDefault();
 });
@@ -380,110 +378,99 @@ document.addEventListener('keydown', function(event) {
 
 const correctPassword = "20242025";
 
-
 function checkPassword() {
-  const userPassword = document.getElementById("password").value;
-  if (userPassword === correctPassword) {
-    localStorage.setItem("isAuthenticated", "true");
-    setPageState("selectionContainer");
-    goToPage("selectionContainer");
-  } else {
-    document.getElementById("errorMessage").style.display = "block";
-  }
+    const userPassword = document.getElementById("password").value;
+    if (userPassword === correctPassword) {
+        const timestamp = new Date().getTime();
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("authTimestamp", timestamp); // Save the timestamp
+        setPageState("selectionContainer");
+        goToPage("selectionContainer");
+    } else {
+        document.getElementById("errorMessage").style.display = "block";
+    }
 }
-
 
 function goToPage(pageId) {
+    const containers = document.querySelectorAll(".container > div");
+    containers.forEach((container) => {
+        container.style.display = "none";
+    });
 
-  const containers = document.querySelectorAll(".container > div");
-  containers.forEach((container) => {
-    container.style.display = "none";
-  });
-
-
-  document.getElementById(pageId).style.display = "block";
-
-
-  localStorage.setItem("currentPage", pageId);
+    document.getElementById(pageId).style.display = "block";
+    localStorage.setItem("currentPage", pageId);
 }
-
 
 function returnToSelection() {
-  setPageState("selectionContainer");
-  goToPage("selectionContainer");
+    setPageState("selectionContainer");
+    goToPage("selectionContainer");
 }
-
 
 function setPageState(pageId) {
-  localStorage.setItem("currentPage", pageId);
+    localStorage.setItem("currentPage", pageId);
 }
-
 
 function togglePdfList(id) {
+    const allPdfLists = document.querySelectorAll(".pdf-list");
+    const allIcons = document.querySelectorAll(".model-title span");
 
-  const allPdfLists = document.querySelectorAll(".pdf-list");
-  const allIcons = document.querySelectorAll(".model-title span");
+    allPdfLists.forEach((list) => {
+        if (list.id !== id) {
+            list.style.display = "none";
+        }
+    });
 
-  allPdfLists.forEach((list) => {
-    if (list.id !== id) {
-      list.style.display = "none";
+    allIcons.forEach((icon) => {
+        icon.textContent = "▼";
+    });
+
+    const pdfList = document.getElementById(id);
+    const titleIcon = pdfList.previousElementSibling.querySelector("span");
+    if (pdfList.style.display === "none" || pdfList.style.display === "") {
+        pdfList.style.display = "flex";
+        pdfList.style.flexWrap = "wrap";
+        pdfList.style.justifyContent = "center";
+        titleIcon.textContent = "▲";
+        localStorage.setItem("openedPdfList", id);  
+    } else {
+        pdfList.style.display = "none";
+        titleIcon.textContent = "▼";
+        localStorage.removeItem("openedPdfList");  
     }
-  });
-
-
-  allIcons.forEach((icon) => {
-    icon.textContent = "▼";
-  });
-
-
-  const pdfList = document.getElementById(id);
-  const titleIcon = pdfList.previousElementSibling.querySelector("span");
-  if (pdfList.style.display === "none" || pdfList.style.display === "") {
-    pdfList.style.display = "flex";
-    pdfList.style.flexWrap = "wrap";
-    pdfList.style.justifyContent = "center";
-    titleIcon.textContent = "▲";
-    localStorage.setItem("openedPdfList", id);  
-  } else {
-    pdfList.style.display = "none";
-    titleIcon.textContent = "▼";
-    localStorage.removeItem("openedPdfList");  
-  }
 }
-
 
 function restorePageState() {
-  const isAuthenticated = localStorage.getItem("isAuthenticated");
-  const currentPage = localStorage.getItem("currentPage");
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    const authTimestamp = localStorage.getItem("authTimestamp");
+    const currentTime = new Date().getTime();
 
-  if (isAuthenticated === "true") {
-    if (currentPage) {
-      goToPage(currentPage);
+    // Check if the password is expired
+    if (isAuthenticated === "true" && authTimestamp && (currentTime - authTimestamp) < 3600000) { // 1 hour = 3600000ms
+        const currentPage = localStorage.getItem("currentPage");
+        if (currentPage) {
+            goToPage(currentPage);
+        } else {
+            goToPage("selectionContainer");
+        }
+
+        const openedPdfListId = localStorage.getItem("openedPdfList");
+        if (openedPdfListId) {
+            togglePdfList(openedPdfListId);
+        }
     } else {
-      goToPage("selectionContainer");
+        localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("authTimestamp");
+        goToPage("loginContainer");
     }
-  } else {
-    goToPage("loginContainer");
-  }
-
-  const openedPdfListId = localStorage.getItem("openedPdfList");
-  if (openedPdfListId) {
-    togglePdfList(openedPdfListId);
-  }
 }
 
-
-
 document.getElementById("password").addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    checkPassword();
-  }
+    if (event.key === "Enter") {
+        checkPassword();
+    }
 });
 
-
-
 window.onload = restorePageState;
-
 </script>
 
   
