@@ -388,7 +388,7 @@ window.onload = function () {
 
   if (savedPassword === defaultPassword) {
     // Show the main page if the saved password matches the default
-    document.getElementById("main-page").style.display = "block";
+    document.getElementById("selection-container").style.display = "block";
     document.getElementById("password-page").style.display = "none";
   }
 };
@@ -402,7 +402,7 @@ function checkPassword() {
     localStorage.setItem("password", inputPassword);
 
     // Redirect to main page
-    document.getElementById("main-page").style.display = "block";
+    document.getElementById("selection-container").style.display = "block";
     document.getElementById("password-page").style.display = "none";
   } else {
     alert("Incorrect Password. Please try again.");
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (savedPassword && savedPassword !== defaultPassword) {
     // Redirect back to the password page if tampered
-    document.getElementById("main-page").style.display = "none";
+    document.getElementById("selection-container").style.display = "none";
     document.getElementById("password-page").style.display = "block";
     alert("Password has been changed. Please re-enter the new password.");
   }
