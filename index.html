@@ -382,40 +382,25 @@ const correctPassword = "20242025";
 
 
 function checkPassword() {
-  const userPassword = document.getElementById("password").value;
-  if (userPassword === correctPassword) {
-    localStorage.setItem("isAuthenticated", "true");
-    setPageState("selectionContainer");
-    goToPage("selectionContainer");
-  } else {
-    document.getElementById("errorMessage").style.display = "block";
-  }
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('errorMessage');
+    if (password === '20242025') {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('selectionContainer').style.display = 'block';
+    } else {
+        errorMessage.style.display = 'block';
+    }
 }
-
 
 function goToPage(pageId) {
-
-  const containers = document.querySelectorAll(".container > div");
-  containers.forEach((container) => {
-    container.style.display = "none";
-  });
-
-
-  document.getElementById(pageId).style.display = "block";
-
-
-  localStorage.setItem("currentPage", pageId);
+    document.querySelectorAll('.content-container').forEach(el => el.style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
+    document.getElementById('selectionContainer').style.display = 'none';
 }
-
 
 function returnToSelection() {
-  setPageState("selectionContainer");
-  goToPage("selectionContainer");
-}
-
-
-function setPageState(pageId) {
-  localStorage.setItem("currentPage", pageId);
+    document.getElementById('selectionContainer').style.display = 'block';
+    document.querySelectorAll('.content-container').forEach(el => el.style.display = 'none');
 }
 
 
