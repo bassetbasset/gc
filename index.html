@@ -445,7 +445,7 @@ function restorePageState() {
     const currentTime = new Date().getTime();
 
     // Check if the password is expired
-    if (isAuthenticated === "true" && authTimestamp && (currentTime - authTimestamp) < 86400000) { // 1 day = 86400000ms
+    if (isAuthenticated === "true" && authTimestamp && (currentTime - authTimestamp) < 300000) { // 2 min = 300000ms
         const currentPage = localStorage.getItem("currentPage");
         if (currentPage) {
             goToPage(currentPage);
